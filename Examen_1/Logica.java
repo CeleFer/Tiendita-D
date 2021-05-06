@@ -25,7 +25,7 @@ public class Logica {
         */
         art.datos[vr][0] = LE.leerDouble("Ingrese la cantidad del producto # "+vr);
         art.datos[vr][1] = LE.leerDouble("Ingrese el precio de compra del producto # "+vr);
-        art.datos[vr][1] = LE.leerDouble("Ingrese el precio de venta del producto # "+vr);
+        art.datos[vr][2] = LE.leerDouble("Ingrese el precio de venta del producto # "+vr);
 
         art.numArt++;
     }
@@ -83,6 +83,8 @@ public class Logica {
          *  datos[x][2] = Precio venta
         */
 
+        if(vr != -1){
+
             for(int x = vr; x < art.numArt; x++ ){
                 art.nombres[x]     =  art.nombres[x+1];
                 art.datos[x][0]    =  art.datos[x+1][0];
@@ -90,7 +92,7 @@ public class Logica {
                 art.datos[x][2]    =  art.datos[x+1][2];
             }
             art.numArt--;
-        
+        }
 
     }
 
@@ -202,52 +204,70 @@ public class Logica {
         int vr          = 0;
 
         // 1.) Verificar si el valor buscado para vender existe
-        while(vr != -1){
-            vr = busqueda(art);
-        }
+        
 
-        // 2.) Los valores se pasan a variables auxiliares
+        vr = busqueda(art);
 
-        aux   = art.datos[vr][0];
+        if(vr != -1){
+            // 2.) Los valores se pasan a variables auxiliares
 
-        // 3.) Verificar si la cantidad ingresada excede la cantidad exsistente
-        while( aux < 0  ){
-          aux   = art.datos[vr][0];
-          cant = LE.leerInt("Ingrese la cantidad del producto que desea comprar"
-                                +"\n"+"Producto : "+art.nombres[vr]
-                                +"\n"+"Cantidad disponible : "+art.datos[vr][0]);
+            aux   = art.datos[vr][0];
 
-          aux = aux - cant ;
+            // 3.) Verificar si la cantidad ingresada excede la cantidad exsistente
 
-            if(aux < 0){
-                LE.mostrarAdvertencia("Cantidad ingresada excede el stock del producto"
-                                    +"\n"+"Ingrese valores validos");
+            if( aux > 0  ){
+                
+            do{  
+
+            aux   = art.datos[vr][0];
+            cant = LE.leerInt("Ingrese la cantidad del producto que desea comprar"
+                                    +"\n"+"Producto : "+art.nombres[vr]
+                                    +"\n"+"Cantidad disponible : "+art.datos[vr][0]);
+
+            aux = aux - cant ;
+
+                if(aux < 0){
+                    LE.mostrarAdvertencia("Cantidad ingresada excede el stock del producto"
+                                        +"\n"+"Ingrese valores validos");
+                }else{
+                    break;
+                }
+
+                }while(true);
+            
+        
+
+                art.datos[vr][0] = aux;
+
+                total_cant += cant;
+
+                ganancia_total += cant*gananciaParcial(art, vr);
+                // Productos con una cantidad de 0 son eliminados de la BD
+
+                LE.mostrarInformacion("Producto comprado "+"\n"
+                                    +"Codigo   : "+art.codigos[vr]+"\n"
+                                    +"Cantidad : "+art.datos[vr][0]+"\n"
+                                    +"Venta    : "+art.datos[vr][2]+"\n" 
+                                    +"Ganancia : "+gananciaParcial(art, vr)
+                                    );
+
+                // Si la cantidad del producto es menor a 1  (o sea , 0 )
+                if(art.datos[vr][0] < 1){
+                    eliminar(art, vr); // Sobrecarga de metodo
+                }
+
+                    
+                
             }
-        }
 
-        art.datos[vr][0] = aux;
-
-        total_cant += cant;
-
-        ganancia_total += cant*gananciaParcial(art, vr);
-        // Productos con una cantidad de 0 son eliminados de la BD
-
-        LE.mostrarInformacion("Producto comprado "+"\n"
-                             +"Codigo   : "+art.codigos[vr]+"\n"
-                             +"Cantidad : "+art.datos[vr][0]+"\n"
-                             +"Venta    : "+art.datos[vr][2]+"\n" 
-                             +"Ganancia : "+gananciaParcial(art, vr)
-                             );
-
-        eliminar(art, vr); // Sobrecarga de metodos
-
+        }    
         
     }
 
     public String listar(Articulos art){
         String txt = "";
 
-        txt = "Cod" +"\t"+"Art."+"\t"+"Cant."+"\t"+"P.C"+"\t"+"P.V"+"Gan. P."+"\n";
+        txt = "Cod" +"\t"+"Art."+"\t"+"Cant."+"\t"+"P.C"+"\t"+"P.V"+"\t"+"Gan. P."+"\n";
         
         for(int x = 0 ; x < art.numArt; x++){
             txt += art.codigos[x]+"\t"+art.nombres[x]+"\t"+art.datos[x][0]
