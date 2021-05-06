@@ -6,6 +6,7 @@ public class Logica {
     int    total_cant = 0;
 
     /** 
+     * 
     *  datos[x][0] = Cantidad precio  
     *  datos[x][1] = Precio de compra 
     *  datos[x][2] = Precio venta
