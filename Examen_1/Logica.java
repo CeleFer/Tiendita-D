@@ -37,7 +37,7 @@ public class Logica {
 
         for(int x = 0 ; x < art.numArt ; x++){
 
-            if(busca.equalsIgnoreCase(art.codigos[x])){
+            if(busca.equalsIgnoreCase(art.nombres[x])){
                 vector = x;
                 LE.mostrarInformacion("Valor encontrado con exito");
             }
@@ -98,9 +98,9 @@ public class Logica {
 
         int vr = busqueda(art);
 
-        String num = art.codigos[vr];
-
         if(vr != -1){
+
+            String num = art.codigos[vr];
 
             art.nombres[vr]     =  LE.leerString("Ingrese un  nuevo nombre   / Producto # "+num);
             art.datos[vr][0]    =  LE.leerDouble("Ingrese una nueva cantidad / Producto # "+num);
@@ -247,13 +247,13 @@ public class Logica {
     public String listar(Articulos art){
         String txt = "";
 
-        txt = "Cod" +"\t"+"Art."+"\t"+"Cant."+"\t"+"P.C"+"\t"+"P.V"+"Gan. P.";
+        txt = "Cod" +"\t"+"Art."+"\t"+"Cant."+"\t"+"P.C"+"\t"+"P.V"+"Gan. P."+"\n";
         
         for(int x = 0 ; x < art.numArt; x++){
             txt += art.codigos[x]+"\t"+art.nombres[x]+"\t"+art.datos[x][0]
                                                      +"\t"+art.datos[x][1]
                                                      +"\t"+art.datos[x][2]
-                                                     +"\t"+gananciaParcial(art, x);
+                                                     +"\t"+gananciaParcial(art, x)+"\n";
         }
         return txt;
     }
@@ -272,20 +272,21 @@ public class Logica {
 
         while(salida){
 
-            txt = "            Celefer             ";
-            txt += "-------------------------------";
-            txt += "Ganancia total : "+ganancia_total;
-            txt += "Total de productos vendidos: "+total_cant;
-            txt += "-------------------------------";
-            txt += "[0]Ingresar";
-            txt += "[1]Eliminar";
-            txt += "[2]Modificar";
-            txt += "    [3]Ordenar por codigo";
-            txt += "    [4]Ordenar por nombre";
-            txt += "[5]Venta";
-            txt += "-------------------------------";
-            txt += "[6]Salida";
-            txt += "-------------------------------";
+            txt = "            Celefer             " + "\n";
+            txt += "-------------------------------" + "\n";
+            txt += "Ganancia total : "+ganancia_total+ "\n";
+            txt += "Total de productos vendidos: "+total_cant+ "\n";
+            txt += "-------------------------------"+ "\n";
+            txt += "[0]Ingresar"+ "\n";
+            txt += "[1]Eliminar"+ "\n";
+            txt += "[2]Modificar"+ "\n";
+            txt += "    [3]Ordenar por codigo"+ "\n";
+            txt += "    [4]Ordenar por nombre"+ "\n";
+            txt += "[5]Venta"+ "\n";
+            txt += "[6]Mostrar inventario"+"\n";
+            txt += "-------------------------------"+ "\n";
+            txt += "[7]Salida"+ "\n";
+            txt += "-------------------------------"+ "\n";
 
             op = LE.leerInt(txt);
 
@@ -309,6 +310,9 @@ public class Logica {
                     venta(art);
                     break;
                 case 6:
+                    mostrar(art);
+                    break;
+                case 7:
                     salida = false;
                     break;
                 default:
